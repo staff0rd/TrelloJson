@@ -49,5 +49,39 @@ namespace TrelloJson
             }
             return "";
         }
+
+        internal void PopulateLists()
+        {
+            foreach ( var card in Cards)
+            {
+                Lists.Single(l => l.Id == card.IdList).Cards.Add(card);
+            }
+        }
+
+        internal void Dump()
+        {
+            foreach (var list in Lists)
+            {
+                Console.WriteLine(list);
+                foreach ( var card in list.Cards)
+                {
+                    Console.WriteLine($"\t{card.Name}");
+                }
+            }
+        }
+
+        internal void DumpHtml()
+        {
+            foreach (var list in Lists)
+            {
+                Console.WriteLine(list);
+                Console.WriteLine("<ul>");
+                foreach (var card in list.Cards)
+                {
+                    Console.WriteLine($"<li>{card.Name}</li>");
+                }
+                Console.WriteLine("</ul>");
+            }
+        }
     }
 }

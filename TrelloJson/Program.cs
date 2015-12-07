@@ -6,17 +6,23 @@ namespace TrelloJson
 {
     class Program
     {
-        private const string JsonFile = @"e:\Projects\TrelloJson\TrelloJson\trello-json-testing.json";
-
-        static void Main()
+        static void Main(params string[] args)
         {
+
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Usage: TrelloJson.exe <trellojsonoutput.json>");
+                return;
+            }
             // store all data from the given file into a data variable
-            var data = File.ReadAllText(JsonFile);
+            var data = File.ReadAllText(args[0]);
 
             // deserialize data. After deserialization, our object json will be 
             // populated with information from JSON file
             var serializer = new JavaScriptSerializer();
             var json = serializer.Deserialize<Trello>(data);
+
+            json.PopulateLists();
 
             // write some information about our objects we just populated from
             // JSON file to do a proof of concept
@@ -25,6 +31,9 @@ namespace TrelloJson
                 json.Lists.Count,
                 json.Cards.Count,
                 json.Actions.Count);
+
+            //json.Dump();
+            json.DumpHtml();
             
             // optionally, write some data to file using our objects
             //var sb = new StringBuilder();
@@ -34,10 +43,6 @@ namespace TrelloJson
             //    sb.AppendLine(card.ToString() + "|" + json.ListName(card.IdList));
             //}
             //File.WriteAllText(JsonFile + ".output.txt", sb.ToString());
-
-            Console.WriteLine("Done");
-            Console.Read();
-
         }
     }
 
